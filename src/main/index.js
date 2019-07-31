@@ -4,22 +4,20 @@
 var electron        = require('electron');
 var app             = electron.app;
 
-if (require('electron-squirrel-startup')) app.quit();
-
 var Promise         = require('bluebird');
 var path            = require('path');
 var BrowserWindow   = electron.BrowserWindow;
 var shell           = electron.shell;
 var ipc             = electron.ipcMain;
 var mavensmate      = require('mavensmate');
-var AppUpdater      = require('./lib/updater');
+// var AppUpdater      = require('./lib/updater');
 var appTray         = require('./lib/tray');
 var appMenu         = require('./lib/menu');
 
 var mainWindow = null;
 var server = null;
 var serverConfig = null;
-var appUpdater = null;
+// var appUpdater = null;
 var menu = null;
 var trayIcon = null;
 
@@ -106,10 +104,8 @@ var attachMainWindow = function() {
             skipTaskbar: serverConfig.get('mm_windows_skip_taskbar'),
             icon: path.join(__dirname, '..', 'resources', 'icon.png')
           });
-
+          console.log('file://' + __dirname + '/index.html');
           mainWindow.loadURL('file://' + __dirname + '/index.html');
-
-          // mainWindow.openDevTools();
 
           mainWindow.webContents.on('did-finish-load', function() {
             mainWindow.webContents.send('new-web-view', 'http://localhost:56248/app/home');
@@ -172,6 +168,7 @@ app.on('activate', (evt, hasVisibleWindows) => {
 
 // enforce a single version of the app
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
+  
   // Someone tried to run a second instance, we should focus our window.
   if (mainWindow) {
     if (mainWindow.isMinimized()) mainWindow.restore();
@@ -180,6 +177,8 @@ var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) 
     attachMainWindow();
   }
 });
+
+console.log('here', shouldQuit);
 
 if (shouldQuit) {
   app.quit();
@@ -197,7 +196,7 @@ app.on('ready', function() {
       }
       menu = appMenu.init(attachMainWindow);
       trayIcon = appTray.init(serverConfig, attachMainWindow);
-      appUpdater = new AppUpdater(mainWindow, serverConfig);
+      // appUpdater = new AppUpdater(mainWindow, serverConfig);
     })
     .catch(function(err) {
       console.error('Error starting MavensMate: ', err);
