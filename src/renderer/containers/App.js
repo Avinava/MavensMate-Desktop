@@ -5,7 +5,7 @@ import * as actions from '../actions/actions';
 import Views from './Views';
 import ViewManager from './ViewManager';
 import Loading from './Loading';
-import UpdateNotifier from './UpdateNotifier';
+// import UpdateNotifier from './UpdateNotifier';
 import ErrorMsg from './Error';
 
 class App extends Component {
@@ -26,10 +26,10 @@ class App extends Component {
       dispatch(actions.showViewManager());
     });
 
-    ipc.on('show-update-notifier', function(evt, releaseName, action) {
-      console.log('showing update notifier', releaseName, action);
-      dispatch(actions.showUpdateNotifier(releaseName, action));
-    });
+    // ipc.on('show-update-notifier', function(evt, releaseName, action) {
+    //   console.log('showing update notifier', releaseName, action);
+    //   dispatch(actions.showUpdateNotifier(releaseName, action));
+    // });
 
     ipc.on('toggle-server-developer-tools', function() {
       var webview = document.querySelector('webview:not(.hide)');
@@ -112,7 +112,6 @@ class App extends Component {
               <Views {...bindActionCreators(actions, dispatch)}/>
               <ViewManager {...bindActionCreators(actions, dispatch)}/>
               <Loading {...bindActionCreators(actions, dispatch)}/>
-              <UpdateNotifier {...bindActionCreators(actions, dispatch)}/>
             </div>
           }
         </div>
